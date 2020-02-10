@@ -25,17 +25,15 @@ def Prediction(dictionary):
   demand = ProcessData.ProcessData(dictionary)
   #    print(demand.head())
   d = differenceCount.differenceCount(demand)
-  
+  print("differenceCount = ", d)
   #    j = 0
   params = list()
   modelsDict = {}
   
   demandDiff = demand
-  w = d
   
-  while w >= 0:
+  for i in range(d):
       demandDiff = demandDiff.diff()
-      w-=1
   
   #    print("Len of demandDiff: ", len(demandDiff))
   
@@ -69,7 +67,7 @@ def Prediction(dictionary):
       list5 = []
       
       print("predDict: \n", predDict)
-      
+#  Math needs fixing (I think); don't know why suddenly stopped working
       for (key,value) in predDict.items():
           list1.append(key)
           list2.append(predDict[key])
