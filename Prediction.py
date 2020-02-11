@@ -18,11 +18,11 @@ import numpy as np
 
 
 
-def GenerateModel(dictionary):    
+def GenerateModel(dictionary, demand):    
   warnings.filterwarnings("ignore")
   start = timer()
   print("Beginning process...")
-  demand = ProcessData.ProcessData(dictionary)
+#  demand = ProcessData.ProcessData(dictionary)
   #    print(demand.head())
   d = differenceCount.differenceCount(demand)
   print("differenceCount = ", d)
@@ -53,11 +53,10 @@ def GenerateModel(dictionary):
   print ("This took {0}hrs {1} mins".format((dt // 3600), ((dt / 3600)-(dt//3600))*60))
   
   
-def GetPrediction(dictionary):
+def GetPrediction(dictionary, demand):
   print("Loading models from saved .joblib file...")
   savedDict = load('SARIMAS.joblib')
   print("Generating predictions:")
-  demand = ProcessData.ProcessData(dictionary)
   #    print(demand.head())
   d = differenceCount.differenceCount(demand)
   print("differenceCount = ", d)
@@ -84,13 +83,13 @@ def GetPrediction(dictionary):
   for (key,value) in predDict.items():
       list1.append(key)
       list2.append(predDict[key])
-      print("List2:\n", list2)
+  print("List2:\n", list2)
   for item in list2:
       for (x,y) in np.ndenumerate(item):
         list3.append(UpOrDown.UpOrDown(y))
-        print("List3:\n", list3)
-  for i in range(len(demandDiff.columns)):
-    list5.append(demandDiff[list1[i]].iloc[-1])
+  print("List3:\n", list3)
+  for i in range(len(demand.columns)):
+    list5.append(demand[list1[i]].iloc[-1])
   
   print("List5:\n", list5)
     

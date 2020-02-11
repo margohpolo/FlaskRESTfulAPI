@@ -5,8 +5,8 @@ Created on Mon Feb 10 13:31:02 2020
 @author: Maaaaarrrkkk
 """
 
-import Prediction
-import threading
+import Prediction, threading, ProcessData
+
 from flask import Flask, request, json
 from flask_restful import Resource, Api
 from datetime import datetime
@@ -36,28 +36,34 @@ class Main(Resource):
     getDict_id = request.args.get('id')
     getDict[getDict_id] = request.args.get('data')
     loadDict = json.loads(getDict[getDict_id].replace('\'', '\"'))
-    thread = threading.Thread(target=Main.GenerateModel, args=(loadDict,))
+    thread = threading.Thread(target=Main.GenerateModel, args=(loadDict, getDict_id))
     thread.daemon = True
     thread.start()
     #latestPrediction = Main.MakePrediction(loadDict)
     #return {getDict_id: latestPrediction}, 200
     return "Put completed."
 
-  def GenerateModel(dictionary):
-    Prediction.GenerateModel(dictionary)
-    latestPrediction = Prediction.GetPrediction(dictionary)
+  def GenerateModel(dictionary, id):
+    demand = ProcessData.ProcessData(dictionary)
+    Prediction.GenerateModel(dictionary, demand)
+    latestPrediction = Prediction.GetPrediction(dictionary, demand)
+    loadDict[id] = latestPrediction
     print("latestPrediction type: ", type(latestPrediction), "\n latestPrediction: ", latestPrediction)
     return "Model Generation completed."
 
-  def GetPrediction(dictionary):
-    return latestPrediction
+#  def GetPrediction(dictionary, id):
+#    loadDict_id = id
+#    latestPrediction = Prediction.GetPrediction(dictionary)    
+#    print("latestPrediction type: ", type(latestPrediction), "\n latestPrediction: ", latestPrediction)
+#
+#    return latestPrediction
   
   @app.route("/get", methods=["GET"])
   def get():
-    getDict_id = request.args.get('id')
+    get_id = request.args.get('id')
 #    dictionary = request.args.get('data')
 #    loadDict = json.loads(dictionary.replace('\'', '\"'))
-    return {getDict_id: latestPrediction}, 200
+    return {get_id: loadDict[get_id]}, 200
     #return {latestPrediction}, 200
   
 api.add_resource(Main, '/<string:getDict_id>')
