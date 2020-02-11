@@ -11,7 +11,7 @@ def paramList(differenceCounter):
     d = differenceCounter
     q_values = range(2)
     P_values = range(2)
-    D = 1
+    D = differenceCounter
     Q_values = range(2)
     m = 12
     t = 'n'

@@ -84,26 +84,27 @@ def GetPrediction(dictionary):
   for (key,value) in predDict.items():
       list1.append(key)
       list2.append(predDict[key])
-#        print("List2:\n", list2)
+      print("List2:\n", list2)
   for item in list2:
       for (x,y) in np.ndenumerate(item):
-          list3.append(UpOrDown.UpOrDown(y))
-#        print("List3:\n", list3)
+        list3.append(UpOrDown.UpOrDown(y))
+        print("List3:\n", list3)
   for i in range(len(demandDiff.columns)):
-      list5.append(demandDiff[list1[i]].iloc[-1])
+    list5.append(demandDiff[list1[i]].iloc[-1])
   
-#        print("List5:\n", list5)
-  
+  print("List5:\n", list5)
+    
   k = 0
   for j in range(1,len(demandDiff.columns)*2,2):
-      list4.append(([(list3[j-1] + list5[k]), (list3[j] + list5[k] + list3[j-1])]))
-      k+=1
+    list4.append(([(list3[j-1] + list5[k]), (list3[j] + list5[k] + list3[j-1])]))
+    k+=1
   
   for m in range(len(demandDiff.columns)):
-      predDict[list1[m]] = list4[m]
+    predDict[list1[m]] = list4[m]
       
-#        print("List4:\n", list4)
+  print("List4:\n", list4)
   print("Length of predDict: ", len(predDict))
+  print("predDict after: ", predDict)
   #Dump predDict as a JSON string
   dictDump = json.dumps(predDict)
   

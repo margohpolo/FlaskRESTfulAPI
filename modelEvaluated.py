@@ -8,7 +8,6 @@ from statsmodels.tsa.statespace.sarimax import SARIMAX
 from sklearn.metrics import mean_squared_error
 from math import sqrt, floor
 
-#create and evaluate ARIMA model with parameters (p,d,q)
 
 def modelEvaluated(data, sarimaOrder):
     #training data will be 8 years or 96 data points

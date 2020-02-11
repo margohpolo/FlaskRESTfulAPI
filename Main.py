@@ -31,7 +31,7 @@ class Main(Resource):
               # demand[columnName].append(y)
       # After this step then do Differencing
 
-  @app.route("/put")
+  @app.route("/put", methods=["PUT"])
   def put():
     getDict_id = request.args.get('id')
     getDict[getDict_id] = request.args.get('data')
@@ -41,20 +41,23 @@ class Main(Resource):
     thread.start()
     #latestPrediction = Main.MakePrediction(loadDict)
     #return {getDict_id: latestPrediction}, 200
-    return "hello"
+    return "Put completed."
 
   def GenerateModel(dictionary):
-    return Prediction.GenerateModel(dictionary)
+    Prediction.GenerateModel(dictionary)
+    latestPrediction = Prediction.GetPrediction(dictionary)
+    print("latestPrediction type: ", type(latestPrediction), "\n latestPrediction: ", latestPrediction)
+    return "Model Generation completed."
 
   def GetPrediction(dictionary):
-    return Prediction.GetPrediction(dictionary)
+    return latestPrediction
   
-  @app.route("/get")
+  @app.route("/get", methods=["GET"])
   def get():
     getDict_id = request.args.get('id')
-    dictionary = request.args.get('data')
-    loadDict = json.loads(dictionary.replace('\'', '\"'))
-    return {getDict_id: Main.GetPrediction(loadDict)}, 200
+#    dictionary = request.args.get('data')
+#    loadDict = json.loads(dictionary.replace('\'', '\"'))
+    return {getDict_id: latestPrediction}, 200
     #return {latestPrediction}, 200
   
 api.add_resource(Main, '/<string:getDict_id>')

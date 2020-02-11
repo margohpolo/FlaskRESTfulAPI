@@ -31,5 +31,6 @@ def differenceCount(df):
             adfuller_test.adfuller_test(column, a, b, name=column.name)
         if len(b) == n:
             allStationary = True
-#    return c
-    return int(1) #Lazy fix (I'm the worst); don't know why suddenly stopped working
+            break
+    return c
+#    return int(1) #Lazy fix (I'm the worst); don't know why suddenly stopped working
