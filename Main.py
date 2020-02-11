@@ -6,7 +6,7 @@ Created on Mon Feb 10 13:31:02 2020
 """
 
 import Prediction
-
+import threading
 from flask import Flask, request, json
 from flask_restful import Resource, Api
 from datetime import datetime
@@ -31,21 +31,34 @@ class Main(Resource):
               # demand[columnName].append(y)
       # After this step then do Differencing
 
-  def put(self, getDict_id):
-    getDict[getDict_id] = request.form['data']
+  @app.route("/put")
+  def put():
+    getDict_id = request.args.get('id')
+    getDict[getDict_id] = request.args.get('data')
     loadDict = json.loads(getDict[getDict_id].replace('\'', '\"'))
-    latestPrediction = Main.MakePrediction(loadDict)
-    return {getDict_id: latestPrediction}, 200
-#    return {getDict_id: getDict[getDict_id]}
+    thread = threading.Thread(target=Main.GenerateModel, args=(loadDict,))
+    thread.daemon = True
+    thread.start()
+    #latestPrediction = Main.MakePrediction(loadDict)
+    #return {getDict_id: latestPrediction}, 200
+    return "hello"
 
-  def MakePrediction(dictionary):
-    return Prediction.Prediction(dictionary)
+  def GenerateModel(dictionary):
+    return Prediction.GenerateModel(dictionary)
+
+  def GetPrediction(dictionary):
+    return Prediction.GetPrediction(dictionary)
   
-  def get(self, getDict_id):
-    return {latestPrediction}, 200
+  @app.route("/get")
+  def get():
+    getDict_id = request.args.get('id')
+    dictionary = request.args.get('data')
+    loadDict = json.loads(dictionary.replace('\'', '\"'))
+    return {getDict_id: Main.GetPrediction(loadDict)}, 200
+    #return {latestPrediction}, 200
   
 api.add_resource(Main, '/<string:getDict_id>')
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, threaded=True)
