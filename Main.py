@@ -48,24 +48,41 @@ class Main(Resource):
     Prediction.GenerateModel(dictionary, demand)
     latestPrediction = Prediction.GetPrediction(dictionary, demand)
     loadDict[id] = latestPrediction
+    with open("savedPredictions.txt", "a+") as outfile:
+      json.dump({"id": id, "predictions": latestPrediction}, outfile)
+      outfile.write("\n")
     print("latestPrediction type: ", type(latestPrediction), "\n latestPrediction: ", latestPrediction)
     return "Model Generation completed."
 
-#  def GetPrediction(dictionary, id):
-#    loadDict_id = id
-#    latestPrediction = Prediction.GetPrediction(dictionary)    
-#    print("latestPrediction type: ", type(latestPrediction), "\n latestPrediction: ", latestPrediction)
-#
-#    return latestPrediction
+  def GetPrediction(dictionary):
+    return Prediction.GetPrediction(dictionary)
   
   @app.route("/get", methods=["GET"])
   def get():
     get_id = request.args.get('id')
-    return {get_id: (loadDict[get_id])}, 200
-#    return {get_id: (loadDict[get_id]).replace("\\","")}, 200 <- this is not working :()
+    found = False
+    infile = open("savedPredictions.txt", "r")
+    lines = infile.readlines()
+    for line in lines:
+      data = json.loads(line)
+      if(data["id"] == get_id):
+        found = True
+        predictions = data["predictions"]
+    if found:
+      return {"predictions": predictions, "result": "success"}, 200
+    else:
+      return {"result": "failed"}, 200
   
 api.add_resource(Main, '/<string:getDict_id>')
 
 
 if __name__ == '__main__':
     app.run(debug=True, threaded=True)
+    
+    
+  
+
+
+
+
+

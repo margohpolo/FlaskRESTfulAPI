@@ -62,9 +62,7 @@ def GetPrediction(dictionary, demand):
   print("differenceCount = ", d)
   #    j = 0
   modelsDict = {}
-  demandDiff = demand
-  for i in range(d):
-      demandDiff = demandDiff.diff()
+  demandDiff = demand.diff()
   predDict = {}
   for item in savedDict:
       for key, value in item.items():

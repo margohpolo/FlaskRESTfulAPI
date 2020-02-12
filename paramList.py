@@ -8,10 +8,10 @@ Created on Tue Feb  4 03:44:58 2020
 def paramList(differenceCounter):
     params = list()
     p_values = range(2)
-    d = differenceCounter
+    d = differenceCounter-1
     q_values = range(2)
     P_values = range(2)
-    D = differenceCounter
+    D = differenceCounter-1
     Q_values = range(2)
     m = 12
     t = 'n'
