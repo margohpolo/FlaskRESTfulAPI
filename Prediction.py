@@ -92,11 +92,11 @@ def GetPrediction(dictionary, demand):
   print("List5:\n", list5)
     
   
-  for j in range(0,len(demandDiff.columns)):
+  for j in range(0,len(demand.columns)):
     list4.append(list3[j] + list5[j])
     
   
-  for m in range(len(demandDiff.columns)):
+  for m in range(len(demand.columns)):
     predDict[list1[m]] = list4[m]
       
   print("List4:\n", list4)
