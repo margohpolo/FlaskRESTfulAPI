@@ -68,7 +68,7 @@ def GetPrediction(dictionary, demand):
   predDict = {}
   for item in savedDict:
       for key, value in item.items():
-          predictions = value.fit().forecast(steps=2)
+          predictions = value.fit().forecast(steps=1)
           print(predictions)
           predDict[key] = predictions #Next 2 months' predictions
    #Processing predDict, as predDict is currently a tuple followed by float
@@ -93,10 +93,10 @@ def GetPrediction(dictionary, demand):
   
   print("List5:\n", list5)
     
-  k = 0
-  for j in range(1,len(demandDiff.columns)*2,2):
-    list4.append(([(list3[j-1] + list5[k]), (list3[j] + list5[k] + list3[j-1])]))
-    k+=1
+  
+  for j in range(0,len(demandDiff.columns)):
+    list4.append(list3[j] + list5[j])
+    
   
   for m in range(len(demandDiff.columns)):
     predDict[list1[m]] = list4[m]

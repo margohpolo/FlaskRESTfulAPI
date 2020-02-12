@@ -61,10 +61,8 @@ class Main(Resource):
   @app.route("/get", methods=["GET"])
   def get():
     get_id = request.args.get('id')
-#    dictionary = request.args.get('data')
-#    loadDict = json.loads(dictionary.replace('\'', '\"'))
-    return {get_id: loadDict[get_id]}, 200
-    #return {latestPrediction}, 200
+    return {get_id: (loadDict[get_id])}, 200
+#    return {get_id: (loadDict[get_id]).replace("\\","")}, 200 <- this is not working :()
   
 api.add_resource(Main, '/<string:getDict_id>')
 
