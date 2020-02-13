@@ -36,7 +36,7 @@ class Main(Resource):
     getDict_id = request.args.get('id')
     getDict[getDict_id] = request.args.get('data')
     loadDict = json.loads(getDict[getDict_id].replace('\'', '\"'))
-    thread = threading.Thread(target=Main.GenerateModel, args=(loadDict, getDict_id))
+    thread = threading.Thread(target=Main.GenerateModel, kwargs=dict(dictionary=loadDict, id=getDict_id))
     thread.daemon = True
     thread.start()
     #latestPrediction = Main.MakePrediction(loadDict)
@@ -54,9 +54,6 @@ class Main(Resource):
     print("latestPrediction type: ", type(latestPrediction), "\n latestPrediction: ", latestPrediction)
     return "Model Generation completed."
 
-  def GetPrediction(dictionary):
-    return Prediction.GetPrediction(dictionary)
-  
   @app.route("/get", methods=["GET"])
   def get():
     get_id = request.args.get('id')
@@ -77,7 +74,7 @@ api.add_resource(Main, '/<string:getDict_id>')
 
 
 if __name__ == '__main__':
-    app.run(debug=True, threaded=True)
+    app.run(debug=False, threaded=True)
     
     
   
